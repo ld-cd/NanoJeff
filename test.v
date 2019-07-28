@@ -4,7 +4,6 @@ module test;
 
   wire [7:0] iaddr;
   wire [7:0] daddr;
-  wire [7:0] waddr;
   wire [7:0] wdata;
   wire [7:0] data;
   wire [7:0] inst;
@@ -18,14 +17,14 @@ module test;
   always #5 clk = ~clk;
   always #5 reset = 0;
 
-  NanoJeff n (iaddr, daddr, waddr, wdata, inst, data, wen, clk, reset);
+  NanoJeff n (iaddr, daddr, wdata, inst, data, wen, clk, reset);
 
   assign data = mem[daddr];
   assign inst = mem[iaddr];
 
   always @(posedge clk) begin
     if (wen == 1) begin
-      mem[waddr] = wdata;
+      mem[daddr] = wdata;
     end
   end
 

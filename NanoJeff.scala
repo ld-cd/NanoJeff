@@ -5,7 +5,7 @@ import spinal.lib._
 
 class NanoJeff extends Component {
   val io = new Bundle{
-    val rAddr1, rAddr2, wAddr, wData = out Bits(8 bits)
+    val addr1, addr2, wData = out Bits(8 bits)
     val rData1, rData2 = in Bits(8 bits)
     val wEn = out Bool
   }
@@ -22,11 +22,13 @@ class NanoJeff extends Component {
 
   val op = Bits(4 bits)
 
-  io.rAddr1 := programCounter.asBits
-  io.rAddr2 := regfile.io.r2.asBits
-  io.wAddr := regfile.io.r1.asBits
+  io.addr1 := programCounter.asBits
+  io.addr2 := regfile.io.r2.asBits
   io.wData := regfile.io.r2.asBits
   io.wEn := ctrl.io.mWEn
+  when(io.wEn){
+    io.addr2 := regfile.io.r1.asBits
+  }
 
   pcp := programCounter + 1
   pcm := programCounter - 1
