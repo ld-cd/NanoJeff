@@ -1,6 +1,9 @@
 *.class
 *.log
 
+project/
+target/
+
 NanoJeff.v
 NanoJeff.vcd
 a.out
