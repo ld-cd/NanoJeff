@@ -1,2 +1,6 @@
 *.class
 *.log
+
+NanoJeff.v
+NanoJeff.vcd
+a.out
