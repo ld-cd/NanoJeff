@@ -29,21 +29,8 @@ module test;
   end
 
   initial begin
-    $dumpfile ("NanoJeff.vcd");
+    $dumpfile("NanoJeff.vcd");
     $dumpvars;
-    mem[0] = 8'b01010000;
-    mem[1] = 8'b01010101;
-    mem[2] = 8'b01011010;
-    mem[3] = 8'b01011111;
-    mem[4] = 8'b10101111;
-    mem[5] = 8'b10111111;
-    mem[6] = 8'b01101100;
-    mem[7] = 8'b01010000;
-    mem[8] = 8'b10011100;
-    mem[9] = 8'b10100001;
-    mem[10] = 8'b01100100;
-    mem[11] = 8'b10011100;
-    mem[12] = 8'b01100001;
-    mem[13] = 8'b11110001;
+    $readmemb("tests/increment_mem.b", mem);
   end
 endmodule
