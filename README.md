@@ -1,5 +1,5 @@
 # NanoJeff
-NanoJeff is an exceedingly small 8 bit RISC processor meant for FPGAs. It has 16 instructions which operate on four 8-bit registers.
+NanoJeff is an exceedingly small 8 bit RISC processor meant for FPGAs implemented in SpinalHDL. It has 16 instructions which operate on four 8-bit registers.
 
 The processer itself is currently not pipelined to save on area, but is simple enough that it would be trivial to accomplish without much cost
 
@@ -95,3 +95,9 @@ optional arguments:
   -h, --help  show this help message and exit
   -f FORMAT   Select output format (COE, HEX, BINARY)
 ```
+
+## Building
+With sbt and scala installed on your system, simply executing `make` or `sbt run` in the top level directory will build NanoJeff.v which contains everything required to add NanoJeff to a design. By default the design is built for dual ported memory. The io_addr1 and io_rData1 signals feed the instruction pipeline, and the io_addr2 io_rData2 io_wData and io_wEn signals control the second port which is accessed by load and store instructions. Because of this implementation the instructions may exist in a ROM seperate from the data accesed by loads and stores.
+
+### Running Simulations
+With Icarus Verilog installed simply running make test will load the example program in `tests/increment_mem.s` into memory using the test.v test bench and begin execution. Execution may be halted at any time by pressing Ctrl+C and issuing the finish command. If this is not done the program will execute forever. The output of the simulation is the `NanoJeff.vcd` file which may be opened and explored in gtkwave or the wave viewer of your choice.
