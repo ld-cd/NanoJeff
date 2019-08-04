@@ -24,13 +24,14 @@ SI-type:
 ```
 
 ### Instruction Table
+`PC` indicates the program counter, `M(r)` indicates the memory address which is pointed to by R, `?` is the C ternary operator, and `x0` indicates the 0th register.
 | Mnemonic | Opcode | RTL Description                      | Type |
 |----------|--------|--------------------------------------|------|
 | sl       | 0b0000 | a := a << b                          | R    |
 | sr       | 0b0001 | a := a >> b                          | R    |
 | not      | 0b0010 | a := ~b                              | R    |
 | and      | 0b0011 | a := a & b                           | R    |
-| or       | 0b0100 | a := a | b                           | R    |
+| or       | 0b0100 | a := a \| b                          | R    |
 | xor      | 0b0101 | a := a ^ b                           | R    |
 | add      | 0b0110 | a := a + b                           | R    |
 | sub      | 0b0111 | a := a - b                           | R    |
