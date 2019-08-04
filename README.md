@@ -25,6 +25,7 @@ SI-type:
 
 ### Instruction Table
 `PC` indicates the program counter, `M(r)` indicates the memory address which is pointed to by R, `?` is the C ternary operator, and `x0` indicates the 0th register.
+
 | Mnemonic | Opcode | RTL Description                      | Type |
 |----------|--------|--------------------------------------|------|
 | sl       | 0b0000 | a := a << b                          | R    |
