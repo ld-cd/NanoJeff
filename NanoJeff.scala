@@ -49,6 +49,12 @@ class NanoJeff extends Component {
     regfile.io.wData := pcp
   }.elsewhen(op === B"1000"){
     regfile.io.wData := io.rData2.asUInt
+  }.elsewhen(op === B"1010"){
+    regfile.io.wData := B(8 bits, (7 downto 4) -> regfile.io.r1.asBits(7 downto 4)
+    , (3 downto 0) -> immDecode.io.imm.asBits(3 downto 0)).asUInt
+  }.elsewhen(op === B"1011"){
+    regfile.io.wData := B(8 bits, (3 downto 0) -> regfile.io.r1.asBits(3 downto 0)
+    , (7 downto 4) -> immDecode.io.imm.asBits(3 downto 0)).asUInt
   }
 
   alu.io.aluSel := ctrl.io.aluSel
