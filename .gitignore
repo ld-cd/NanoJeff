@@ -3,6 +3,8 @@
 
 project/
 target/
+.bloop/
+.metals/
 
 NanoJeff.v
 NanoJeff.vcd
