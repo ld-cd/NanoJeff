@@ -17,7 +17,7 @@ class Ops(Enum):
     OR = 4
     XOR = 5
     ADD = 6
-    SUB = 7
+    SLT = 7
     LW = 8
     SW = 9
     LI = 10

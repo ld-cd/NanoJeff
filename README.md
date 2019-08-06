@@ -35,7 +35,7 @@ SI-type:
 | or       | 0b0100 | a := a \| b                          | R    |
 | xor      | 0b0101 | a := a ^ b                           | R    |
 | add      | 0b0110 | a := a + b                           | R    |
-| sub      | 0b0111 | a := a - b                           | R    |
+| slt      | 0b0111 | a := a < b                           | R    |
 | lw       | 0b1000 | a := M(b)                            | R    |
 | sw       | 0b1001 | M(a) := b                            | R    |
 | li       | 0b1010 | x0[3:0] := I[3:0]                    | I    |
