@@ -33,7 +33,7 @@ class NanoALU extends Component {
       io.result := io.a + io.b
     }
     is(B"111"){
-      io.result := io.a < io.b
+      io.result := (io.a < io.b).asUInt(8 bits)
     }
   }
 }
