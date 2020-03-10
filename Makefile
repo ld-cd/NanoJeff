@@ -1,4 +1,4 @@
-NanoJeff.v: *.scala
+NanoJeff.v: ./src/main/scala/*.scala
 	sbt run
 
 tests/increment_mem.b: tests/increment_mem.s
