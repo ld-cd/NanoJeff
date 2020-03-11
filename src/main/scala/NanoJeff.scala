@@ -4,12 +4,13 @@ import spinal.core._
 import spinal.lib._
 import NanoISA._
 
-class NanoJeff extends Component {
+class NanoJeff(haltSupport: Boolean = false) extends Component {
 
   val io = new Bundle{
     val addr1, addr2, wData = out Bits(8 bits)
     val rData1, rData2 = in Bits(8 bits)
     val wEn = out Bool
+    val halt = if (haltSupport) in(Bool) else null
   }
 
   val alu = new NanoALU
@@ -85,6 +86,13 @@ class NanoJeff extends Component {
       programCounter := alu.io.result
     }
   }
+
+  val haltingLogic = if (haltSupport) new Area {
+    when(io.halt){
+      regfile.io.wEn := False
+      programCounter := programCounter
+    }
+  } else null
 }
 
 object Main {
