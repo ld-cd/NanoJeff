@@ -17,7 +17,7 @@ module test;
   always #5 clk = ~clk;
   always #5 reset = 0;
 
-  NanoJeff n (iaddr, daddr, wdata, inst, data, wen, clk, reset);
+  NanoJeff n (daddr, data, wdata, wen, iaddr, inst, clk, reset);
 
   assign data = mem[daddr];
   assign inst = mem[iaddr];

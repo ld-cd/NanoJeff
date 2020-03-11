@@ -4,12 +4,17 @@ import spinal.core._
 import spinal.lib._
 import NanoISA._
 
-class NanoJeff(haltSupport: Boolean = false) extends Component {
+class NanoJeff(haltSupport: Boolean = false, renSupport: Boolean = false) extends Component {
 
   val io = new Bundle{
-    val addr1, addr2, wData = out Bits(8 bits)
-    val rData1, rData2 = in Bits(8 bits)
-    val wEn = out Bool
+    val dAddr = out UInt(8 bits)
+    val dRData = in Bits(8 bits)
+    val dWData = out Bits(8 bits)
+    val dREn = if (renSupport) out(Bool) else null
+    val dWEn = out Bool
+
+    val iAddr = out UInt(8 bits)
+    val iRData = in Bits(8 bits)
     val halt = if (haltSupport) in(Bool) else null
   }
 
@@ -25,26 +30,29 @@ class NanoJeff(haltSupport: Boolean = false) extends Component {
 
   val op = NanoOp()
 
-  val addressLogic = new Area {
-    io.addr1 := programCounter.asBits
-    io.addr2 := regfile.io.r2.asBits
-    io.wData := regfile.io.r2.asBits
-    io.wEn := ctrl.io.mWEn
-    when(io.wEn){
-      io.addr2 := regfile.io.r1.asBits
+  val busLogic = new Area {
+    io.iAddr := programCounter
+    io.dAddr := regfile.io.r2
+    io.dWData := regfile.io.r2.asBits
+    io.dWEn := ctrl.io.mWEn
+    if (renSupport) {
+      io.dREn := op === NanoOp.LW
+    }
+    when(io.dWEn){
+      io.dAddr := regfile.io.r1
     }
   }
 
   pcp := programCounter + 1
   pcm := programCounter - 1
 
-  iDecode.io.instr := io.rData1
+  iDecode.io.instr := io.iRData
   op := iDecode.io.op
 
   ctrl.io.op := op
 
   immDecode.io.op := op
-  immDecode.io.instr := io.rData1
+  immDecode.io.instr := io.iRData
 
   val regfileLogic = new Area {
     regfile.io.r1Sel := iDecode.io.r1Sel
@@ -54,7 +62,7 @@ class NanoJeff(haltSupport: Boolean = false) extends Component {
     when(op === NanoOp.JR){
       regfile.io.wData := pcp
     }.elsewhen(op === NanoOp.LW){
-      regfile.io.wData := io.rData2.asUInt
+      regfile.io.wData := io.dRData.asUInt
     }.elsewhen(op === NanoOp.LI){
       regfile.io.wData := B(8 bits, (7 downto 4) -> regfile.io.r1.asBits(7 downto 4)
       , (3 downto 0) -> immDecode.io.imm.asBits(3 downto 0)).asUInt
@@ -90,6 +98,7 @@ class NanoJeff(haltSupport: Boolean = false) extends Component {
   val haltingLogic = if (haltSupport) new Area {
     when(io.halt){
       regfile.io.wEn := False
+      io.dWEn := False
       programCounter := programCounter
     }
   } else null
