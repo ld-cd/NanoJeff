@@ -2,11 +2,13 @@ package nanoJeff
 
 import spinal.core._
 import spinal.lib._
+import NanoISA._
 
 class NanoCtrl extends Component{
+
   val io = new Bundle{
     val r1, r2 = in Bits(2 bits)
-    val op = in Bits(4 bits)
+    val op = in(NanoOp())
     val aluSel = out Bits(3 bits)
     val mWEn = out Bool
     val rWEn = out Bool
@@ -16,17 +18,14 @@ class NanoCtrl extends Component{
   io.mWEn := False
   io.aluSel := B"100"
 
-  when(io.op(3) === False){
+  when(NanoISA.isArith(io.op)){
     io.rWEn := True
-    io.aluSel := io.op(2 downto 0)
-  }.elsewhen((io.op === B"1000") || (io.op === B"1100")
-    || (io.op(3 downto 1) === B"101")){
+    io.aluSel := io.op.asBits(2 downto 0)
+  }.elsewhen(io.op === NanoOp.LW || io.op === NanoOp.JR || NanoISA.isImmLoad(io.op)){
     io.rWEn := True
-  }.elsewhen(io.op === B"1001"){
+  }.elsewhen(io.op === NanoOp.SW){
     io.mWEn := True
-  }.elsewhen((io.op === B"1101") || (io.op === B"1110")){
+  }.elsewhen(io.op === NanoOp.BZ || NanoISA.isImmJump(io.op)){
     io.aluSel := B"110"
-  }.elsewhen(io.op === B"1111"){
-    io.aluSel := B"111"
   }
 }

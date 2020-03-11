@@ -2,19 +2,22 @@ package nanoJeff
 
 import spinal.core._
 import spinal.lib._
+import NanoISA._
 
 class NanoIDecode extends Component{
+
   val io = new Bundle{
     val instr = in Bits(8 bits)
-    val r1Sel, r2Sel = out Bits(2 bits)
-    val op = out Bits(4 bits)
+    val r1Sel = out(NanoRegs())
+    val r2Sel = out(NanoRegs())
+    val op = out(NanoOp())
   }
 
-  io.op := io.instr(7 downto 4)
-  io.r1Sel := io.instr(3 downto 2)
-  io.r2Sel := io.instr(1 downto 0)
+  io.op.assignFromBits(io.instr(7 downto 4))
+  io.r1Sel.assignFromBits(io.instr(3 downto 2))
+  io.r2Sel.assignFromBits(io.instr(1 downto 0))
 
-  when(io.op(3 downto 1) === B"101"){
-    io.r1Sel := B"00"
+  when(isImmLoad(io.op)){
+    io.r1Sel := NanoRegs.X0
   }
 }
